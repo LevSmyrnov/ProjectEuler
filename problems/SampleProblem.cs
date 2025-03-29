@@ -6,7 +6,6 @@ public class SampleProblem : Problem
 {
     protected override string Solve(string input)
     {
-        Console.WriteLine("Problem 0");
         return input;
     }
 }
