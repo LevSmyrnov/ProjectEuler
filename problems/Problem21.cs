@@ -16,31 +16,34 @@ public class Problem21 : Problem
         }
         else
         {
-            Sieve(numberLimit);
+            Sieve(numberLimit * 10);
             var candidates = new List<bool?>(numberLimit * 2);
-            for (int i = 0; i <= numberLimit; i++)
+            for (int i = 0; i < numberLimit * 2; i++)
             {
                 candidates.Add(null);
             }
-
             for (var i = 10; i <= numberLimit; i++)
             {
-                if (candidates.ElementAtOrDefault(i) != null)
+                if (candidates.ElementAtOrDefault(i) == true)
                 {
                     continue;
                 }
                 var sumOfDivisors = SumOfDivisors(i);
-                if (sumOfDivisors == 1)
+                if (sumOfDivisors == 1 || sumOfDivisors == i)
                 {
                     continue;
                 }
                 var pairSumOfDivisors = SumOfDivisors(sumOfDivisors);
-                while (pairSumOfDivisors >= candidates.Count)
+
+                while (sumOfDivisors > candidates.Count - 1)
                 {
                     candidates.Add(null);
                 }
-                candidates[sumOfDivisors] = sumOfDivisors == pairSumOfDivisors;
-                candidates[pairSumOfDivisors] = sumOfDivisors == pairSumOfDivisors;
+                candidates[i] = i == pairSumOfDivisors;
+                if (sumOfDivisors > i)
+                {
+                    candidates[sumOfDivisors] = i == pairSumOfDivisors;
+                }
             }
 
             var sumOfAmicableNumbers = 0;
@@ -48,8 +51,7 @@ public class Problem21 : Problem
             {
                 if (candidates[i] ?? false)
                 {
-        Console.WriteLine(i);
-
+                    Console.WriteLine(i);
                     sumOfAmicableNumbers += i;
                 }
             }
@@ -80,7 +82,8 @@ public class Problem21 : Problem
         }
         Dictionary<int, int> factors = new Dictionary<int, int>();
         var initial_n = n;
-        for (var i = 0; primes[i] <= n / 2; i++)
+        var i = 0;
+        while (initial_n > 1)
         {
             while (initial_n % primes[i] == 0)
             {
@@ -94,6 +97,7 @@ public class Problem21 : Problem
                     factors.Add(primes[i], 1);
                 }
             }
+            i++;
         }
         return factors;
     }
